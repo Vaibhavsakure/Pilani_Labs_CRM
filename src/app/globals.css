@@ -1,0 +1,88 @@
+@import "tailwindcss";
+
+@theme {
+  /* ── PilaniLabs Brand Colors ── */
+  --color-background: #F7F5F0;
+  --color-foreground: #1B2A4A;
+  --color-card: #FFFFFF;
+  --color-card-foreground: #1B2A4A;
+  --color-popover: #FFFFFF;
+  --color-popover-foreground: #1B2A4A;
+  --color-primary: #C8962E;
+  --color-primary-foreground: #FFFFFF;
+  --color-secondary: #F0EDE6;
+  --color-secondary-foreground: #1B2A4A;
+  --color-muted: #F0EDE6;
+  --color-muted-foreground: #6B7280;
+  --color-accent: #C8962E;
+  --color-accent-foreground: #FFFFFF;
+  --color-destructive: #DC2626;
+  --color-destructive-foreground: #FFFFFF;
+  --color-border: #E5E2DB;
+  --color-input: #E5E2DB;
+  --color-ring: #C8962E;
+  --color-sidebar: #FFFFFF;
+  --color-sidebar-foreground: #6B7280;
+  --color-sidebar-active: #C8962E;
+  --color-success: #16A34A;
+  --color-warning: #D97706;
+  --color-info: #2563EB;
+  --color-navy: #1B2A4A;
+  --color-navy-light: #2D4A7A;
+  --color-gold-light: #F5EDD6;
+  --radius-sm: 0;
+  --radius-md: 0.125rem;
+  --radius-lg: 0.25rem;
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Playfair Display", "Georgia", serif;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+  }
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #D5D0C7;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #B8B3AA;
+}
+
+/* ── Chart Tooltip ── */
+.tooltip-card {
+  background: #FFFFFF;
+  border: 1px solid #E5E2DB;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(27, 42, 74, 0.08);
+}
+
+/* ── Serif display heading ── */
+.font-display {
+  font-family: var(--font-display);
+}
+
+/* ── Pulse animation for status indicators ── */
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+.animate-pulse-soft {
+  animation: pulse-soft 2s ease-in-out infinite;
+}
