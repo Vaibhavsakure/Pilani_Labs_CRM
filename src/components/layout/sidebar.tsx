@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/lib/auth-context";
 import {
   LayoutDashboard,
   Users,
@@ -17,6 +18,7 @@ import {
   HelpCircle,
   ChevronLeft,
   ChevronRight,
+  Shield,
 } from "lucide-react";
 
 const navigation = [
@@ -41,6 +43,12 @@ interface SidebarProps {
 
 export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const pathname = usePathname();
+  const { canAccessAdmin } = useAuth();
+
+  // Build navigation with conditional Admin item
+  const fullNavigation = canAccessAdmin()
+    ? [...navigation, { name: "Admin", href: "/admin", icon: Shield }]
+    : navigation;
 
   return (
     <aside
@@ -71,7 +79,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
             </span>
           )}
         </div>
-        {navigation.map((item) => {
+        {fullNavigation.map((item) => {
           const isActive =
             pathname === item.href ||
             (item.href !== "/" && pathname.startsWith(item.href));
@@ -142,3 +150,4 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
     </aside>
   );
 }
+

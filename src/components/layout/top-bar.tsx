@@ -1,9 +1,10 @@
 "use client";
 
-import React from "react";
-import { Bell, Search, Plus } from "lucide-react";
+import React, { useState } from "react";
+import { Bell, Search, Plus, LogOut, Loader2 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/lib/auth-context";
 
 interface TopBarProps {
   title: string;
@@ -11,6 +12,27 @@ interface TopBarProps {
 }
 
 export function TopBar({ title, subtitle }: TopBarProps) {
+  const { profile, loading, signOut } = useAuth();
+  const [signingOut, setSigningOut] = useState(false);
+
+  const initials = profile?.full_name
+    ? profile.full_name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+    : "??";
+
+  const displayName = profile?.full_name || "Loading...";
+  const displayRole = profile?.role
+    ? profile.role.charAt(0).toUpperCase() + profile.role.slice(1)
+    : "";
+
+  async function handleSignOut() {
+    setSigningOut(true);
+    await signOut();
+  }
+
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-white px-6">
       {/* Left: Title */}
@@ -53,14 +75,37 @@ export function TopBar({ title, subtitle }: TopBarProps) {
         {/* User */}
         <div className="flex items-center gap-3 border-l border-border pl-4">
           <Avatar className="h-9 w-9 border border-border shadow-sm rounded-sm">
-            <AvatarFallback className="text-xs rounded-sm">AM</AvatarFallback>
+            <AvatarFallback className="text-xs rounded-sm">
+              {loading ? "..." : initials}
+            </AvatarFallback>
           </Avatar>
           <div className="hidden lg:block">
-            <p className="text-sm font-semibold text-navy leading-none mb-1">Arjun Mehta</p>
-            <p className="text-[11px] text-muted-foreground leading-none uppercase tracking-wider">Admin</p>
+            <p className="text-sm font-semibold text-navy leading-none mb-1">
+              {displayName}
+            </p>
+            {displayRole && (
+              <p className="text-[11px] text-muted-foreground leading-none uppercase tracking-wider">
+                {displayRole}
+              </p>
+            )}
           </div>
+
+          {/* Logout */}
+          <button
+            onClick={handleSignOut}
+            disabled={signingOut}
+            className="flex h-8 w-8 items-center justify-center rounded-sm text-muted-foreground hover:text-destructive hover:bg-destructive/5 border border-transparent hover:border-destructive/20 transition-all duration-150 cursor-pointer disabled:opacity-50"
+            title="Sign out"
+          >
+            {signingOut ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <LogOut className="h-4 w-4" />
+            )}
+          </button>
         </div>
       </div>
     </header>
   );
 }
+
